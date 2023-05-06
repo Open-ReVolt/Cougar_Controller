@@ -1,0 +1,34 @@
+#!/bin/sh
+
+CRC=`avrprog -file $1 -crc 2>&1 | grep "CRC = 0x"`
+if [ "$?" != "0" ]; then
+	RV="$?"
+	rm -f autocrc.gen
+	exit "$RV"
+fi
+
+CRCVAL=""
+for loop in $CRC
+do
+	CRCVAL="$loop"
+done
+
+echo "#define crc_address $CRCVAL"
+echo "#define crc_address $CRCVAL" > autocrc.gen
+
+diff autocrc.gen autocrc.h
+if [ "$?" != "0" ]; then
+	echo "CRCs differ"
+	cp -f autocrc.gen autocrc.h
+	HEXTIME=`stat $1 | grep Modify`
+	CRCTIME=`stat autocrc.h | grep Modify`
+	while [ "$HEXTIME" = "$CRCTIME" ]
+	do
+		echo "file times for autocrc.h and $1 equal"
+		usleep 200000
+		touch autocrc.h
+		CRCTIME=`stat autocrc.h | grep Modify`
+	done
+	make
+	exit "$?"
+fi

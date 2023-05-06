@@ -1,0 +1,41 @@
+The fuses for the ATMega168 should be as follows
+
+
+Extended Byte:
+
+SPARE       1
+SPARE       1
+SPARE       1
+SPARE       1
+SPARE       1
+BOOTSZ1     0    BootLoader at 0x1C00
+BOOTSZ0     0    BootLoader at 0x1C00
+BOOTRST     0    Reset to BootLoader
+
+
+High Byte:
+
+RSTDISBL    1    PC6 is RESET
+DWEN        1    debugWIRE not enabled
+SPIEN       0    SPI enabled
+WDTON       1    WDT enabled by WDTCR
+EESAVE      1    EE not preseved during chip erase
+BODLEVEL2   1    BOD level 4.3V
+BODLEVEL1   0    BOD level 4.3V
+BODLEVEL0   0    BOD level 4.3V
+
+
+Low Byte:
+
+CKDIV8      1    Do not divide clock by 8
+CKOUT       1    Clock output not enabled
+SUT1        1    65mS
+SUT0        1    65mS
+CLKSEL3     0    Full Swing XTAL
+CLKSEL2     1    Full Swing XTAL
+CLKSEL1     1    Full Swing XTAL
+CLKSEL0     1    XTAL
+
+
+Extended    High        Low
+0xF8        0xDC        0xF7

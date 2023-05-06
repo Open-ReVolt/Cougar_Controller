@@ -1,0 +1,78 @@
+#!/bin/sh
+
+# Delete all hex files
+rm -f hexfiles-m8/*.hex
+rm -f hexfiles-m168/*.hex
+
+# First do ATMega8 (with optimizations -Os)
+export COUG_MCU=atmega8
+export COUG_OPTI=s
+HFDIR="hexfiles-m8"
+
+# No CRC, PWM16K
+export COUG_CRC=NOCRC
+export COUG_PWM=PWM16K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-nocrc-16k.hex"
+
+# No CRC, PWM8K
+export COUG_CRC=NOCRC
+export COUG_PWM=PWM8K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-nocrc-8k.hex"
+
+# CRC, PWM16K
+#export COUG_CRC=AUTOCRC
+#export COUG_PWM=PWM16K
+#make -f Makefile.buildall -B
+#cp -f cougar.hex "$HFDIR/coug-crc-16k.hex"
+
+# CRC, PWM8K
+#export COUG_CRC=AUTOCRC
+#export COUG_PWM=PWM8K
+#make -f Makefile.buildall -B
+#cp -f cougar.hex "$HFDIR/coug-crc-8k.hex"
+
+
+# Now do ATMega168 (with optimizations -O2)
+export COUG_MCU=atmega168
+export COUG_OPTI=2
+HFDIR="hexfiles-m168"
+
+# No CRC, PWM16K
+export COUG_CRC=NOCRC
+export COUG_PWM=PWM16K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-nocrc-16k.hex"
+
+# No CRC, PWM8K
+export COUG_CRC=NOCRC
+export COUG_PWM=PWM8K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-nocrc-8k.hex"
+
+# CRC, PWM16K
+export COUG_CRC=AUTOCRC
+export COUG_PWM=PWM16K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-crc-16k.hex"
+
+# CRC, PWM8K
+export COUG_CRC=AUTOCRC
+export COUG_PWM=PWM8K
+make -f Makefile.buildall -B
+cp -f cougar.hex "$HFDIR/coug-crc-8k.hex"
+
+# clean up
+make -f Makefile.buildall clean
+
+# Build unified hexfiles - ATMEGA8
+#hexmerge/hexmerge 512 bootload/hexfiles/bootload-crc.hex hexfiles-m8/coug-crc-16k.hex >hexfiles-m8/coug-unified-16k.hex
+#hexmerge/hexmerge 512 bootload/hexfiles/bootload-crc.hex hexfiles-m8/coug-crc-8k.hex >hexfiles-m8/coug-unified-8k.hex
+hexmerge/hexmerge 512 bootload/hexfiles/bootload-crc.hex hexfiles-m8/coug-nocrc-16k.hex >hexfiles-m8/coug-unified-16k.hex
+hexmerge/hexmerge 512 bootload/hexfiles/bootload-crc.hex hexfiles-m8/coug-nocrc-8k.hex >hexfiles-m8/coug-unified-8k.hex
+
+
+# Build unified hexfiles - ATMEGA168
+hexmerge/hexmerge 1024 bootload168/hexfiles/bootload-crc.hex hexfiles-m168/coug-crc-16k.hex >hexfiles-m168/coug-unified-16k.hex
+hexmerge/hexmerge 1024 bootload168/hexfiles/bootload-crc.hex hexfiles-m168/coug-crc-8k.hex >hexfiles-m168/coug-unified-8k.hex

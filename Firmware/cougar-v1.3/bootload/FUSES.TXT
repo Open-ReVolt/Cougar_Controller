@@ -1,0 +1,30 @@
+The fuses for the ATMega8 should be as follows
+
+High Byte:
+
+RSTDISBL    1    PC6 is RESET
+WDTWON      1    WDT enabled by WDTCR
+SPIEN       0    SPI enabled
+CKOPT       0    OSC options
+EESAVE      1    EE not preseved during chip erase
+BOOTSZ1     0    BootLoader at 0xE00
+BOOTSZ0     1    BootLoader at 0xE00
+BOOTRST     0    reset to BootLoader
+
+High Byte value = 0xCA
+
+
+
+Low Byte:
+
+BODLEVEL    0    BOD level 4V
+BODEN       0    BOD enabled
+SUT1        1    65mS
+SUT0        0    65mS
+CLKSEL3     1    External XTAL
+CLKSEL2     1    External XTAL
+CLKSEL1     1    External XTAL
+CLKSEL0     1    External XTAL
+
+Low Byte value = 0x2F
+
